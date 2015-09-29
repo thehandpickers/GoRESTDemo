@@ -24,12 +24,13 @@ type Projects struct {
 }
 
 func handler(rw http.ResponseWriter, req *http.Request) {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:3307)/projectdb")
+	// Replace USER_NAME, PASSWORD, DATABASE_NAME with your specific settings
+	db, err := sql.Open("mysql", "USER_NAME:PASSWORD@tcp(localhost:3307)/DATABASE_NAME")
 
-	rows, err := db.Query("SELECT * FROM projects")
+	rows, err := db.Query("SELECT * FROM projects") // Fetch all projects for now
 
 	if err != nil {
-		fmt.Println("Error")
+		fmt.Println("Error") // This error messages need to be more informative. We'll deal with logging later.
 	}
 
 	Response := Projects{}
@@ -45,11 +46,11 @@ func handler(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		fmt.Println("Error")
 	}
-	rw.Header().Set("Content-Type", "application/json")
+	rw.Header().Set("Content-Type", "application/json") // Need to provide correct header responses
 	fmt.Fprintf(rw, string(output))
 }
 
 func main() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", handler) // Deal with Routing
 	http.ListenAndServe(":4040", nil)
 }
